@@ -308,7 +308,11 @@
             </div>
         </div>
         
-        <form id="perceptionForm">
+        <form action="https://formsubmit.co/rafael.lai.barcelos@gmail.com" method="POST">
+            <input type="hidden" name="_subject" value="Novo feedback recebido - Espelho Social">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_next" value="https://example.com/thank-you.html">
+            
             <div class="form-group">
                 <label for="name">Seu nome (opcional):</label>
                 <input type="text" id="name" name="name" placeholder="Como gostaria de ser identificado">
@@ -334,11 +338,12 @@
                         <div>Ambiente Acadêmico</div>
                     </div>
                 </div>
+                <input type="hidden" name="relacionamento" id="relacionamento-input">
             </div>
             
             <div class="form-group">
                 <label>1. Quais são os 3 principais pontos fortes que você enxerga em mim?</label>
-                <textarea id="strengths" name="strengths" placeholder="Ex: Liderança, comunicação, resiliência, paciência, senso de humor..." required></textarea>
+                <textarea id="strengths" name="pontos-fortes" placeholder="Ex: Liderança, comunicação, resiliência, paciência, senso de humor..." required></textarea>
             </div>
             
             <div class="form-group" id="professional-section">
@@ -349,17 +354,18 @@
                     <div class="rating-option" data-value="regular">Regular</div>
                     <div class="rating-option" data-value="precisa-melhorar">Precisa melhorar</div>
                 </div>
-                <textarea name="leadership-details" placeholder="Comentários adicionais sobre gestão..."></textarea>
+                <input type="hidden" name="avaliacao-lideranca" id="lideranca-input">
+                <textarea name="detalhes-lideranca" placeholder="Comentários adicionais sobre gestão..."></textarea>
             </div>
             
             <div class="form-group family-question" id="family-section-1" style="display: none;">
                 <label class="family-label">2. Como você descreveria meu papel na nossa família?</label>
-                <textarea name="family-role" placeholder="Ex: Protetor, conselheiro, unificador, exemplo..."></textarea>
+                <textarea name="papel-familia" placeholder="Ex: Protetor, conselheiro, unificador, exemplo..."></textarea>
             </div>
             
             <div class="form-group">
                 <label>3. O que eu faço que gera impacto positivo nas pessoas ao meu redor?</label>
-                <textarea id="impact" name="impact" placeholder="Ex: Motiva a equipe, resolve conflitos, traz ideias inovadoras, apoia emocionalmente..." required></textarea>
+                <textarea id="impact" name="impacto-positivo" placeholder="Ex: Motiva a equipe, resolve conflitos, traz ideias inovadoras, apoia emocionalmente..." required></textarea>
             </div>
             
             <div class="form-group">
@@ -370,27 +376,28 @@
                     <div class="rating-option" data-value="regular">Regular</div>
                     <div class="rating-option" data-value="precisa-melhorar">Precisa melhorar</div>
                 </div>
-                <textarea name="communication-details" placeholder="Comentários adicionais sobre comunicação..."></textarea>
+                <input type="hidden" name="avaliacao-comunicacao" id="comunicacao-input">
+                <textarea name="detalhes-comunicacao" placeholder="Comentários adicionais sobre comunicação..."></textarea>
             </div>
             
             <div class="form-group">
                 <label>5. O que você acredita que eu poderia melhorar ou desenvolver?</label>
-                <textarea id="improvement" name="improvement" placeholder="Ex: Paciência, delegação, tomada de decisão, expressão de sentimentos..." required></textarea>
+                <textarea id="improvement" name="melhorias" placeholder="Ex: Paciência, delegação, tomada de decisão, expressão de sentimentos..." required></textarea>
             </div>
             
             <div class="form-group family-question" id="family-section-2" style="display: none;">
                 <label class="family-label">6. Como posso ser um membro ainda melhor da nossa família?</label>
-                <textarea name="family-improvement" placeholder="Ex: Passar mais tempo junto, ouvir mais, compartilhar mais experiências..."></textarea>
+                <textarea name="melhorias-familia" placeholder="Ex: Passar mais tempo junto, ouvir mais, compartilhar mais experiências..."></textarea>
             </div>
             
             <div class="form-group">
                 <label>7. Se tivesse que me descrever em 3 palavras, quais seriam?</label>
-                <input type="text" id="words" name="words" placeholder="Ex: Determinado, estratégico, carismático, cuidadoso, divertido" required>
+                <input type="text" id="words" name="tres-palavras" placeholder="Ex: Determinado, estratégico, carismático, cuidadoso, divertido" required>
             </div>
             
             <div class="form-group">
                 <label>8. Como você se sente quando está comigo?</label>
-                <textarea id="feeling" name="feeling" placeholder="Ex: Motivado, ouvido, inspirado, relaxado, feliz..." required></textarea>
+                <textarea id="feeling" name="sentimento" placeholder="Ex: Motivado, ouvido, inspirado, relaxado, feliz..." required></textarea>
             </div>
             
             <div class="form-group">
@@ -401,12 +408,13 @@
                     <div class="rating-option" data-value="regular">Regular</div>
                     <div class="rating-option" data-value="precisa-melhorar">Precisa melhorar</div>
                 </div>
-                <textarea name="balance-details" placeholder="Comentários adicionais..."></textarea>
+                <input type="hidden" name="avaliacao-equilibrio" id="equilibrio-input">
+                <textarea name="detalhes-equilibrio" placeholder="Comentários adicionais..."></textarea>
             </div>
             
             <div class="form-group family-question" id="family-section-3" style="display: none;">
                 <label class="family-label">10. O que mais valoriza em nosso relacionamento familiar?</label>
-                <textarea name="family-value" placeholder="Ex: Nossas conversas, momentos juntos, apoio mútuo, tradições..."></textarea>
+                <textarea name="valor-familia" placeholder="Ex: Nossas conversas, momentos juntos, apoio mútuo, tradições..."></textarea>
             </div>
             
             <button type="submit">Enviar Respostas</button>
@@ -429,6 +437,7 @@
             const relationshipOptions = document.querySelectorAll('.relationship-option');
             const professionalSection = document.getElementById('professional-section');
             const familySections = document.querySelectorAll('.family-question');
+            const relacionamentoInput = document.getElementById('relacionamento-input');
             
             relationshipOptions.forEach(option => {
                 option.addEventListener('click', function() {
@@ -437,6 +446,9 @@
                     
                     // Selecionar este
                     this.classList.add('selected');
+                    
+                    // Atualizar input hidden
+                    relacionamentoInput.value = this.getAttribute('data-value');
                     
                     // Mostrar/ocultar seções baseadas na seleção
                     const value = this.getAttribute('data-value');
@@ -462,21 +474,27 @@
                     
                     // Selecionar este
                     this.classList.add('selected');
+                    
+                    // Adicionar um input hidden para o valor selecionado
+                    const inputName = parent.previousElementSibling.textContent.replace(/[\?\.]/g, '').replace(/\s+/g, '-').toLowerCase() + '-input';
+                    let hiddenInput = document.getElementById(inputName);
+                    
+                    if (!hiddenInput) {
+                        hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = inputName.replace('-input', '');
+                        hiddenInput.id = inputName;
+                        parent.appendChild(hiddenInput);
+                    }
+                    
+                    hiddenInput.value = this.getAttribute('data-value');
                 });
             });
             
             // Manipular envio do formulário
-            document.getElementById('perceptionForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Aqui você normalmente enviaria os dados para um servidor
-                // Como é apenas uma demonstração, vamos apenas mostrar a mensagem de agradecimento
-                
-                document.getElementById('perceptionForm').style.display = 'none';
-                document.getElementById('thankYou').style.display = 'block';
-                
-                // Rolando para a mensagem de agradecimento
-                document.getElementById('thankYou').scrollIntoView({ behavior: 'smooth' });
+            document.querySelector('form').addEventListener('submit', function(e) {
+                // Não prevenir o comportamento padrão para permitir o envio para o FormSubmit
+                // A mensagem de agradecimento será mostrada após o redirecionamento
             });
         });
     </script>
