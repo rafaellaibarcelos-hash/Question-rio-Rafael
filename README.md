@@ -208,6 +208,7 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
+            position: relative;
         }
         
         .rating-option:hover {
@@ -241,12 +242,12 @@
         }
         
         .thank-you {
-            display: none;
             text-align: center;
             padding: 40px;
             background-color: var(--light);
             border-radius: 10px;
             margin-top: 20px;
+            display: none;
         }
         
         .thank-you h2 {
@@ -266,6 +267,15 @@
             font-weight: normal;
             color: #666;
             font-size: 0.9em;
+        }
+        
+        .form-success {
+            display: none;
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
         }
         
         @media (max-width: 600px) {
@@ -308,10 +318,14 @@
             </div>
         </div>
         
-        <form action="https://formsubmit.co/rafael.lai.barcelos@gmail.com" method="POST">
+        <form id="perceptionForm" action="https://formsubmit.co/rafael.lai.barcelos@gmail.com" method="POST">
+            <!-- Configurações do FormSubmit -->
             <input type="hidden" name="_subject" value="Novo feedback recebido - Espelho Social">
             <input type="hidden" name="_template" value="table">
-            <input type="hidden" name="_next" value="https://example.com/thank-you.html">
+            <input type="hidden" name="_autoresponse" value="Obrigado pelo seu feedback! Sua contribuição é muito valiosa para meu desenvolvimento.">
+            <input type="hidden" name="_cc" value="rafael.lai.barcelos@gmail.com">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_next" value="https://yourdomain.com/thank-you.html">
             
             <div class="form-group">
                 <label for="name">Seu nome (opcional):</label>
@@ -338,7 +352,7 @@
                         <div>Ambiente Acadêmico</div>
                     </div>
                 </div>
-                <input type="hidden" name="relacionamento" id="relacionamento-input">
+                <input type="hidden" name="relacionamento" id="relacionamento-input" required>
             </div>
             
             <div class="form-group">
@@ -354,7 +368,7 @@
                     <div class="rating-option" data-value="regular">Regular</div>
                     <div class="rating-option" data-value="precisa-melhorar">Precisa melhorar</div>
                 </div>
-                <input type="hidden" name="avaliacao-lideranca" id="lideranca-input">
+                <input type="hidden" name="avaliacao-lideranca" id="lideranca-input" required>
                 <textarea name="detalhes-lideranca" placeholder="Comentários adicionais sobre gestão..."></textarea>
             </div>
             
@@ -376,7 +390,7 @@
                     <div class="rating-option" data-value="regular">Regular</div>
                     <div class="rating-option" data-value="precisa-melhorar">Precisa melhorar</div>
                 </div>
-                <input type="hidden" name="avaliacao-comunicacao" id="comunicacao-input">
+                <input type="hidden" name="avaliacao-comunicacao" id="comunicacao-input" required>
                 <textarea name="detalhes-comunicacao" placeholder="Comentários adicionais sobre comunicação..."></textarea>
             </div>
             
@@ -408,7 +422,7 @@
                     <div class="rating-option" data-value="regular">Regular</div>
                     <div class="rating-option" data-value="precisa-melhorar">Precisa melhorar</div>
                 </div>
-                <input type="hidden" name="avaliacao-equilibrio" id="equilibrio-input">
+                <input type="hidden" name="avaliacao-equilibrio" id="equilibrio-input" required>
                 <textarea name="detalhes-equilibrio" placeholder="Comentários adicionais..."></textarea>
             </div>
             
@@ -420,10 +434,9 @@
             <button type="submit">Enviar Respostas</button>
         </form>
         
-        <div class="thank-you" id="thankYou">
-            <h2>Muito Obrigado!</h2>
-            <p>Agradeço muito pelo seu tempo e sinceridade!</p>
-            <p>Suas respostas foram registradas e serão de grande valor para o meu desenvolvimento pessoal e profissional.</p>
+        <div class="form-success" id="formSuccess">
+            <h2><i class="fas fa-check-circle" style="color: var(--success);"></i> Formulário Enviado com Sucesso!</h2>
+            <p>Muito obrigado pelo seu feedback. Sua contribuição é muito valiosa para o meu desenvolvimento.</p>
         </div>
     </div>
     
@@ -433,6 +446,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('perceptionForm');
+            const successMessage = document.getElementById('formSuccess');
+            const thankYouMessage = document.getElementById('thankYou');
+            
             // Mostrar/ocultar perguntas baseadas no tipo de relacionamento
             const relationshipOptions = document.querySelectorAll('.relationship-option');
             const professionalSection = document.getElementById('professional-section');
@@ -475,26 +492,51 @@
                     // Selecionar este
                     this.classList.add('selected');
                     
-                    // Adicionar um input hidden para o valor selecionado
-                    const inputName = parent.previousElementSibling.textContent.replace(/[\?\.]/g, '').replace(/\s+/g, '-').toLowerCase() + '-input';
-                    let hiddenInput = document.getElementById(inputName);
-                    
-                    if (!hiddenInput) {
-                        hiddenInput = document.createElement('input');
-                        hiddenInput.type = 'hidden';
-                        hiddenInput.name = inputName.replace('-input', '');
-                        hiddenInput.id = inputName;
-                        parent.appendChild(hiddenInput);
+                    // Encontrar o input hidden correspondente
+                    const hiddenInput = parent.nextElementSibling;
+                    if (hiddenInput && hiddenInput.type === 'hidden') {
+                        hiddenInput.value = this.getAttribute('data-value');
                     }
-                    
-                    hiddenInput.value = this.getAttribute('data-value');
                 });
             });
             
             // Manipular envio do formulário
-            document.querySelector('form').addEventListener('submit', function(e) {
-                // Não prevenir o comportamento padrão para permitir o envio para o FormSubmit
-                // A mensagem de agradecimento será mostrada após o redirecionamento
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validar se uma opção de relacionamento foi selecionada
+                if (!relacionamentoInput.value) {
+                    alert('Por favor, selecione como vocês se conhecem.');
+                    return;
+                }
+                
+                // Validar se todas as classificações foram selecionadas
+                const ratingInputs = document.querySelectorAll('input[type="hidden"][id$="-input"]');
+                let allRatingsSelected = true;
+                
+                ratingInputs.forEach(input => {
+                    if (!input.value) {
+                        allRatingsSelected = false;
+                    }
+                });
+                
+                if (!allRatingsSelected) {
+                    alert('Por favor, responda todas as avaliações com classificação.');
+                    return;
+                }
+                
+                // Se todas as validações passarem, enviar o formulário
+                this.submit();
+                
+                // Mostrar mensagem de sucesso (será substituída pelo redirecionamento do FormSubmit)
+                form.style.display = 'none';
+                successMessage.style.display = 'block';
+                successMessage.scrollIntoView({ behavior: 'smooth' });
+                
+                // Também mostrar mensagem de agradecimento se existir
+                if (thankYouMessage) {
+                    thankYouMessage.style.display = 'block';
+                }
             });
         });
     </script>
