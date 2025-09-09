@@ -10,7 +10,6 @@
             --primary: #1a73e8;
             --secondary: #0d47a1;
             --accent: #ff6d00;
-            --family: #e91e63;
             --light: #f5f7fa;
             --dark: #2d3748;
             --success: #4caf50;
@@ -92,11 +91,6 @@
             border-radius: 0 8px 8px 0;
         }
         
-        .family-section {
-            background-color: rgba(233, 30, 99, 0.1);
-            border-left: 4px solid var(--family);
-        }
-        
         form {
             padding: 0 25px 25px;
         }
@@ -109,19 +103,11 @@
             border-left: 4px solid var(--primary);
         }
         
-        .family-question {
-            border-left: 4px solid var(--family);
-        }
-        
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
             color: var(--primary);
-        }
-        
-        .family-label {
-            color: var(--family);
         }
         
         input[type="text"],
@@ -177,48 +163,10 @@
             font-weight: bold;
         }
         
-        .relationship-option.family {
-            border-color: var(--family);
-        }
-        
-        .relationship-option.family.selected {
-            border-color: var(--family);
-            background-color: #fce4ec;
-        }
-        
         .relationship-option i {
             font-size: 24px;
             margin-bottom: 10px;
             display: block;
-        }
-        
-        .rating {
-            display: flex;
-            gap: 15px;
-            margin: 10px 0;
-            flex-wrap: wrap;
-        }
-        
-        .rating-option {
-            flex: 1;
-            min-width: 100px;
-            text-align: center;
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .rating-option:hover {
-            border-color: var(--primary);
-            background-color: #e8f0fe;
-        }
-        
-        .rating-option.selected {
-            border-color: var(--primary);
-            background-color: #e8f0fe;
-            font-weight: bold;
         }
         
         button {
@@ -240,7 +188,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         
-        .thank-you {
+        .form-success {
             display: none;
             text-align: center;
             padding: 40px;
@@ -249,7 +197,7 @@
             margin-top: 20px;
         }
         
-        .thank-you h2 {
+        .form-success h2 {
             color: var(--primary);
             margin-bottom: 20px;
         }
@@ -277,7 +225,7 @@
                 padding: 20px;
             }
             
-            .rating, .relationship-selector {
+            .relationship-selector {
                 flex-direction: column;
             }
             
@@ -292,7 +240,7 @@
         <header>
             <div class="profile-badge">Coordenador Comercial</div>
             <h1>Espelho Social & Familiar</h1>
-            <p class="subtitle">Feedback para Desenvolvimento Pessoal, Profissional e Familiar</p>
+            <p class="subtitle">Feedback para Desenvolvimento Pessoal</p>
         </header>
         
         <div class="intro">
@@ -308,10 +256,13 @@
             </div>
         </div>
         
-        <form action="https://formsubmit.co/rafael.lai.barcelos@gmail.com" method="POST">
+        <form id="perceptionForm" action="https://formsubmit.co/rafael.lai.barcelos@gmail.com" method="POST">
+            <!-- Configurações do FormSubmit -->
             <input type="hidden" name="_subject" value="Novo feedback recebido - Espelho Social">
             <input type="hidden" name="_template" value="table">
-            <input type="hidden" name="_next" value="https://example.com/thank-you.html">
+            <input type="hidden" name="_autoresponse" value="Obrigado pelo seu feedback! Sua contribuição é muito valiosa para meu desenvolvimento.">
+            <input type="hidden" name="_cc" value="rafael.lai.barcelos@gmail.com">
+            <input type="hidden" name="_captcha" value="false">
             
             <div class="form-group">
                 <label for="name">Seu nome (opcional):</label>
@@ -325,7 +276,7 @@
                         <i class="fas fa-briefcase"></i>
                         <div>Trabalho/Profissional</div>
                     </div>
-                    <div class="relationship-option family" data-value="familia">
+                    <div class="relationship-option" data-value="familia">
                         <i class="fas fa-home"></i>
                         <div>Família</div>
                     </div>
@@ -338,7 +289,7 @@
                         <div>Ambiente Acadêmico</div>
                     </div>
                 </div>
-                <input type="hidden" name="relacionamento" id="relacionamento-input">
+                <input type="hidden" name="relacionamento" id="relacionamento-input" required>
             </div>
             
             <div class="form-group">
@@ -346,97 +297,47 @@
                 <textarea id="strengths" name="pontos-fortes" placeholder="Ex: Liderança, comunicação, resiliência, paciência, senso de humor..." required></textarea>
             </div>
             
-            <div class="form-group" id="professional-section">
-                <label>2. Como você avalia minhas habilidades de liderança e gestão comercial?</label>
-                <div class="rating">
-                    <div class="rating-option" data-value="excelente">Excelente</div>
-                    <div class="rating-option" data-value="bom">Bom</div>
-                    <div class="rating-option" data-value="regular">Regular</div>
-                    <div class="rating-option" data-value="precisa-melhorar">Precisa melhorar</div>
-                </div>
-                <input type="hidden" name="avaliacao-lideranca" id="lideranca-input">
-                <textarea name="detalhes-lideranca" placeholder="Comentários adicionais sobre gestão..."></textarea>
-            </div>
-            
-            <div class="form-group family-question" id="family-section-1" style="display: none;">
-                <label class="family-label">2. Como você descreveria meu papel na nossa família?</label>
-                <textarea name="papel-familia" placeholder="Ex: Protetor, conselheiro, unificador, exemplo..."></textarea>
-            </div>
-            
             <div class="form-group">
-                <label>3. O que eu faço que gera impacto positivo nas pessoas ao meu redor?</label>
+                <label>2. O que eu faço que gera impacto positivo nas pessoas ao meu redor?</label>
                 <textarea id="impact" name="impacto-positivo" placeholder="Ex: Motiva a equipe, resolve conflitos, traz ideias inovadoras, apoia emocionalmente..." required></textarea>
             </div>
             
             <div class="form-group">
-                <label>4. Como você avalia minha capacidade de comunicação e relacionamento?</label>
-                <div class="rating">
-                    <div class="rating-option" data-value="excelente">Excelente</div>
-                    <div class="rating-option" data-value="bom">Bom</div>
-                    <div class="rating-option" data-value="regular">Regular</div>
-                    <div class="rating-option" data-value="precisa-melhorar">Precisa melhorar</div>
-                </div>
-                <input type="hidden" name="avaliacao-comunicacao" id="comunicacao-input">
-                <textarea name="detalhes-comunicacao" placeholder="Comentários adicionais sobre comunicação..."></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label>5. O que você acredita que eu poderia melhorar ou desenvolver?</label>
+                <label>3. O que você acredita que eu poderia melhorar ou desenvolver?</label>
                 <textarea id="improvement" name="melhorias" placeholder="Ex: Paciência, delegação, tomada de decisão, expressão de sentimentos..." required></textarea>
             </div>
             
-            <div class="form-group family-question" id="family-section-2" style="display: none;">
-                <label class="family-label">6. Como posso ser um membro ainda melhor da nossa família?</label>
-                <textarea name="melhorias-familia" placeholder="Ex: Passar mais tempo junto, ouvir mais, compartilhar mais experiências..."></textarea>
-            </div>
-            
             <div class="form-group">
-                <label>7. Se tivesse que me descrever em 3 palavras, quais seriam?</label>
+                <label>4. Se tivesse que me descrever em 3 palavras, quais seriam?</label>
                 <input type="text" id="words" name="tres-palavras" placeholder="Ex: Determinado, estratégico, carismático, cuidadoso, divertido" required>
             </div>
             
             <div class="form-group">
-                <label>8. Como você se sente quando está comigo?</label>
+                <label>5. Como você se sente quando está comigo?</label>
                 <textarea id="feeling" name="sentimento" placeholder="Ex: Motivado, ouvido, inspirado, relaxado, feliz..." required></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label>9. Como você avalia meu equilíbrio entre vida profissional e pessoal?</label>
-                <div class="rating">
-                    <div class="rating-option" data-value="excelente">Excelente</div>
-                    <div class="rating-option" data-value="bom">Bom</div>
-                    <div class="rating-option" data-value="regular">Regular</div>
-                    <div class="rating-option" data-value="precisa-melhorar">Precisa melhorar</div>
-                </div>
-                <input type="hidden" name="avaliacao-equilibrio" id="equilibrio-input">
-                <textarea name="detalhes-equilibrio" placeholder="Comentários adicionais..."></textarea>
-            </div>
-            
-            <div class="form-group family-question" id="family-section-3" style="display: none;">
-                <label class="family-label">10. O que mais valoriza em nosso relacionamento familiar?</label>
-                <textarea name="valor-familia" placeholder="Ex: Nossas conversas, momentos juntos, apoio mútuo, tradições..."></textarea>
             </div>
             
             <button type="submit">Enviar Respostas</button>
         </form>
         
-        <div class="thank-you" id="thankYou">
-            <h2>Muito Obrigado!</h2>
+        <div class="form-success" id="formSuccess">
+            <h2><i class="fas fa-check-circle" style="color: var(--success);"></i> Muito Obrigado!</h2>
             <p>Agradeço muito pelo seu tempo e sinceridade!</p>
-            <p>Suas respostas foram registradas e serão de grande valor para o meu desenvolvimento pessoal e profissional.</p>
+            <p>Suas respostas foram registradas e serão de grande valor para o meu desenvolvimento pessoal.</p>
         </div>
     </div>
     
     <footer>
-        <p>Espelho Social - Desenvolvimento Pessoal, Profissional e Familiar</p>
+        <p>Espelho Social - Desenvolvimento Pessoal</p>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Mostrar/ocultar perguntas baseadas no tipo de relacionamento
+            const form = document.getElementById('perceptionForm');
+            const successMessage = document.getElementById('formSuccess');
+            
+            // Configurar opções de relacionamento
             const relationshipOptions = document.querySelectorAll('.relationship-option');
-            const professionalSection = document.getElementById('professional-section');
-            const familySections = document.querySelectorAll('.family-question');
             const relacionamentoInput = document.getElementById('relacionamento-input');
             
             relationshipOptions.forEach(option => {
@@ -449,52 +350,26 @@
                     
                     // Atualizar input hidden
                     relacionamentoInput.value = this.getAttribute('data-value');
-                    
-                    // Mostrar/ocultar seções baseadas na seleção
-                    const value = this.getAttribute('data-value');
-                    
-                    if (value === 'familia') {
-                        professionalSection.style.display = 'none';
-                        familySections.forEach(section => section.style.display = 'block');
-                    } else {
-                        professionalSection.style.display = 'block';
-                        familySections.forEach(section => section.style.display = 'none');
-                    }
-                });
-            });
-            
-            // Adicionar interatividade às opções de classificação
-            const ratingOptions = document.querySelectorAll('.rating-option');
-            ratingOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    // Remover seleção anterior no mesmo grupo
-                    const parent = this.parentElement;
-                    const siblings = parent.querySelectorAll('.rating-option');
-                    siblings.forEach(sib => sib.classList.remove('selected'));
-                    
-                    // Selecionar este
-                    this.classList.add('selected');
-                    
-                    // Adicionar um input hidden para o valor selecionado
-                    const inputName = parent.previousElementSibling.textContent.replace(/[\?\.]/g, '').replace(/\s+/g, '-').toLowerCase() + '-input';
-                    let hiddenInput = document.getElementById(inputName);
-                    
-                    if (!hiddenInput) {
-                        hiddenInput = document.createElement('input');
-                        hiddenInput.type = 'hidden';
-                        hiddenInput.name = inputName.replace('-input', '');
-                        hiddenInput.id = inputName;
-                        parent.appendChild(hiddenInput);
-                    }
-                    
-                    hiddenInput.value = this.getAttribute('data-value');
                 });
             });
             
             // Manipular envio do formulário
-            document.querySelector('form').addEventListener('submit', function(e) {
-                // Não prevenir o comportamento padrão para permitir o envio para o FormSubmit
-                // A mensagem de agradecimento será mostrada após o redirecionamento
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validar se uma opção de relacionamento foi selecionada
+                if (!relacionamentoInput.value) {
+                    alert('Por favor, selecione como vocês se conhecem.');
+                    return;
+                }
+                
+                // Se todas as validações passarem, enviar o formulário
+                this.submit();
+                
+                // Mostrar mensagem de sucesso
+                form.style.display = 'none';
+                successMessage.style.display = 'block';
+                successMessage.scrollIntoView({ behavior: 'smooth' });
             });
         });
     </script>
